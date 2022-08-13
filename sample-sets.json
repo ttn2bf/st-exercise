@@ -1,79 +1,79 @@
 {
-    "Set1": [
+    "Set 1": [
         {
-            "ProjNum": "1",
-            "CityCost": "low",
-            "StartDate": "9/1/15",
-            "EndDate": "9/3/15"
+            "proj_num": "Project 1",
+            "city_cost": "low",
+            "start_date": "9/1/15",
+            "end_date": "9/3/15"
         }
     ],
 
-    "Set2": [
+    "Set 2": [
         {
-            "ProjNum": "1",
-            "CityCost": "low",
-            "StartDate": "9/1/15",
-            "EndDate": "9/1/15"
+            "proj_num": "Project 1",
+            "city_cost": "low",
+            "start_date": "9/1/15",
+            "end_date": "9/1/15"
         },
         {
-            "ProjNum": "2",
-            "CityCost": "high",
-            "StartDate": "9/2/15",
-            "EndDate": "9/6/15"
+            "proj_num": "Project 2",
+            "city_cost": "high",
+            "start_date": "9/2/15",
+            "end_date": "9/6/15"
         },
         {
-            "ProjNum": "3",
-            "CityCost": "low",
-            "StartDate": "9/6/15",
-            "EndDate": "9/8/15"
+            "proj_num": "Project 3",
+            "city_cost": "low",
+            "start_date": "9/6/15",
+            "end_date": "9/8/15"
         }
     ],
 
-    "Set3": [
+    "Set 3": [
         {
-            "ProjNum": "1",
-            "CityCost": "low",
-            "StartDate": "9/1/15",
-            "EndDate": "9/3/15"
+            "proj_num": "Project 1",
+            "city_cost": "low",
+            "start_date": "9/1/15",
+            "end_date": "9/3/15"
         },
         {
-            "ProjNum": "2",
-            "CityCost": "high",
-            "StartDate": "9/5/15",
-            "EndDate": "9/7/15"
+            "proj_num": "Project 2",
+            "city_cost": "high",
+            "start_date": "9/5/15",
+            "end_date": "9/7/15"
         },
         {
-            "ProjNum": "3",
-            "CityCost": "high",
-            "StartDate": "9/8/15",
-            "EndDate": "9/8/15"
+            "proj_num": "Project 3",
+            "city_cost": "high",
+            "start_date": "9/8/15",
+            "end_date": "9/8/15"
         }
     ],
 
-    "Set4": [
+    "Set 4": [
         {
-            "ProjNum": "1",
-            "CityCost": "low",
-            "StartDate": "9/1/15",
-            "EndDate": "9/1/15"
+            "proj_num": "Project 1",
+            "city_cost": "low",
+            "start_date": "9/1/15",
+            "end_date": "9/1/15"
         },
         {
-            "ProjNum": "2",
-            "CityCost": "low",
-            "StartDate": "9/1/15",
-            "EndDate": "9/1/15"
+            "proj_num": "Project 2",
+            "city_cost": "low",
+            "start_date": "9/1/15",
+            "end_date": "9/1/15"
         },
         {
-            "ProjNum": "3",
-            "CityCost": "high",
-            "StartDate": "9/2/15",
-            "EndDate": "9/2/15"
+            "proj_num": "Project 3",
+            "city_cost": "high",
+            "start_date": "9/2/15",
+            "end_date": "9/2/15"
         },
         {
-            "ProjNum": "4",
-            "CityCost": "high",
-            "StartDate": "9/2/15",
-            "EndDate": "9/3/15"
+            "proj_num": "Project 4",
+            "city_cost": "high",
+            "start_date": "9/2/15",
+            "end_date": "9/3/15"
         }
     ]
 }
