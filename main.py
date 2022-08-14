@@ -12,30 +12,90 @@ hc_full = 85
 
 def calc(ex_set): # ex_set is list of dicts
     total = 0
+    prev_cc = "string"
+    prev_sd = "string"
+    prev_ed = "string"
 
     for proj in ex_set: # each project is a dict
 
+        pn = proj["proj_num"]
         cc = proj["city_cost"]
         sd = proj["start_date"]
         ed = proj["end_date"]
         sday = sd.day
         eday = ed.day
+        delta = ed - sd
 
-        if cc == "low": # low cost city
-            if sd == ed: # one day project
-                total += lc_travel
-            else:
-                between = eday - sday - 1
-                total += (2 * lc_travel)
-                total += (between * lc_full)
-        else: # high cost city
-            if sd == ed: # one day project
-                total += hc_travel
-            else:
-                between = eday - sday - 1
-                total += (2 * hc_travel)
-                total += (between * hc_full)
+        if pn == "Project 1": # for the first project in the set
+            between = delta.days - 1
+            if cc == "low": # low cost city
+                if sd == ed: # one day project
+                    total += lc_travel
+                else:
+                    total += (2 * lc_travel)
+                    total += (between * lc_full)
+            else: # high cost city
+                if sd == ed: # one day project
+                    total += hc_travel
+                else:
+                    total += (2 * hc_travel)
+                    total += (between * hc_full)
+                    
+        else: # for sequential projects, need previous project info
+            between = delta.days - 1
+            gap = (sd - prev_ed).days - 1
+            if cc == "low": # low cost city
+                if sd == ed: # one day project
+                    if gap == 0: # next to another project
+                        if prev_cc == "low": # previous low cost city
+                            total -= lc_travel
+                            total += (2 * lc_full)
+                        else: # previous high cost city
+                            total -= hc_travel
+                            total += (hc_full + lc_full)
+                    else:
+                        total += lc_travel
+                else: # multiple days
+                    if gap == 0: # next to another project
+                        if prev_cc == "low": # previous low cost city
+                            total += ((delta.days + 1) * lc_full)
+                        else: # previous high cost city
+                            total -= hc_travel
+                            total += (hc_full + lc_travel)
+                            total += (delta.days * lc_full)
+                    else:
+                        total += (2 * lc_travel)
+                        total += (between * lc_full)
 
+            else: # high cost city
+                if sd == ed: # one day project
+                    if gap == 0: # next to another project
+                        if prev_cc == "low": # previous low cost city
+                            total -= lc_travel
+                            total += (lc_full + hc_full)
+                        else: # previous high cost city
+                            total -= hc_travel
+                            total += (2 * hc_full)
+                    else:
+                        total += lc_travel
+                else: # multiple days
+                    if gap == 0: # next to another project
+                        if prev_cc == "low": # previous low cost city
+                            total -= lc_travel
+                            total += (lc_full + hc_travel)
+                            total += (delta.days * hc_full)
+                        else: # previous high cost city
+                            total += ((delta.days + 1) * hc_full)
+                    else: 
+                        total += (2 * hc_travel)
+                        total += (between * hc_full)
+        
+        # set current project info as previous project info before moving onto next project
+        prev_cc = cc
+        prev_sd = sd
+        prev_ed = ed
+
+        # print(total)
     return str(total)
 
 
