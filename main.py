@@ -44,6 +44,7 @@ def calc(ex_set): # ex_set is list of dicts
         else: # for sequential projects, need previous project info
             between = delta.days - 1
             gap = (sd - prev_ed).days - 1
+            leftover = delta.days - (abs(gap))
             if cc == "low": # low cost city
                 if sd == ed: # one day project
                     if gap == 0: # next to another project
@@ -53,6 +54,13 @@ def calc(ex_set): # ex_set is list of dicts
                         else: # previous high cost city
                             total -= hc_travel
                             total += (hc_full + lc_full)
+                    elif gap < 0: # overlap
+                        if prev_cc == "low":
+                            total -= lc_travel
+                            total += lc_full
+                        else:
+                            total -= hc_travel
+                            total += hc_full
                     else:
                         total += lc_travel
                 else: # multiple days
@@ -63,6 +71,15 @@ def calc(ex_set): # ex_set is list of dicts
                             total -= hc_travel
                             total += (hc_full + lc_travel)
                             total += (delta.days * lc_full)
+                    elif gap < 0: # overlap
+                        if prev_cc == "low":
+                            total += lc_full
+                            total += (leftover * lc_full)
+                        else:
+                            total -= hc_travel
+                            total += hc_full
+                            total += (leftover * lc_full)
+                            total += lc_travel
                     else:
                         total += (2 * lc_travel)
                         total += (between * lc_full)
@@ -76,6 +93,9 @@ def calc(ex_set): # ex_set is list of dicts
                         else: # previous high cost city
                             total -= hc_travel
                             total += (2 * hc_full)
+                    elif gap < 0: # overlap
+                        total -= hc_travel
+                        total += hc_full
                     else:
                         total += lc_travel
                 else: # multiple days
@@ -86,6 +106,16 @@ def calc(ex_set): # ex_set is list of dicts
                             total += (delta.days * hc_full)
                         else: # previous high cost city
                             total += ((delta.days + 1) * hc_full)
+                    elif gap < 0: # overlap
+                        if prev_cc == "low":
+                            total -= lc_travel
+                            total -= (abs(gap) * lc_full)
+                            total += (abs(gap) * hc_full)
+                            total += (leftover * hc_full)
+                            total += hc_travel
+                        else:
+                            total += hc_full
+                            total += (leftover * hc_full)
                     else: 
                         total += (2 * hc_travel)
                         total += (between * hc_full)
@@ -95,7 +125,7 @@ def calc(ex_set): # ex_set is list of dicts
         prev_sd = sd
         prev_ed = ed
 
-        # print(total)
+        print(total)
     return str(total)
 
 
