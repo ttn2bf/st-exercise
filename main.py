@@ -15,6 +15,7 @@ def calc(ex_set): # ex_set is list of dicts
     prev_cc = "string"
     prev_sd = "string"
     prev_ed = "string"
+    prev_full = False
 
     for proj in ex_set: # each project is a dict
 
@@ -44,88 +45,178 @@ def calc(ex_set): # ex_set is list of dicts
         else: # for sequential projects, need previous project info
             between = delta.days - 1
             gap = (sd - prev_ed).days - 1
-            leftover = delta.days - (abs(gap))
+            leftover = delta.days - (abs(gap)) + 1
             if cc == "low": # low cost city
                 if sd == ed: # one day project
                     if gap == 0: # next to another project
                         if prev_cc == "low": # previous low cost city
-                            total -= lc_travel
-                            total += (2 * lc_full)
+                            if prev_full == True:
+                                total += lc_full
+                            else: 
+                                total -= lc_travel
+                                total += (2 * lc_full)
                         else: # previous high cost city
-                            total -= hc_travel
-                            total += (hc_full + lc_full)
+                            if prev_full == True:
+                                total += lc_full
+                            else:
+                                total -= hc_travel
+                                total += (hc_full + lc_full)
+                        prev_full = True
                     elif gap < 0: # overlap
                         if prev_cc == "low":
-                            total -= lc_travel
-                            total += lc_full
+                            if prev_full == False:
+                                total -= lc_travel
+                                total += lc_full
                         else:
-                            total -= hc_travel
-                            total += hc_full
+                            if prev_full == False:
+                                total -= hc_travel
+                                total += hc_full
+                        prev_full = True
                     else:
                         total += lc_travel
+                        prev_full = False
                 else: # multiple days
                     if gap == 0: # next to another project
                         if prev_cc == "low": # previous low cost city
-                            total += ((delta.days + 1) * lc_full)
+                            if prev_full == True:
+                                total += lc_travel
+                                total += (delta.days * lc_full)
+                            else:
+                                total += ((delta.days + 1) * lc_full)
                         else: # previous high cost city
-                            total -= hc_travel
-                            total += (hc_full + lc_travel)
-                            total += (delta.days * lc_full)
+                            if prev_full == True:
+                                total -= hc_travel
+                                total += lc_travel
+                                total += (delta.days * lc_full)
+                            else:
+                                total -= hc_travel
+                                total += (hc_full + lc_travel)
+                                total += (delta.days * lc_full)
+                        prev_full = False
                     elif gap < 0: # overlap
                         if prev_cc == "low":
-                            total += lc_full
-                            total += (leftover * lc_full)
+                            if leftover >= 1:
+                                if prev_full == True:
+                                    total += ((leftover - 1) * lc_full)
+                                    total += lc_travel
+                                else:
+                                    total += lc_full
+                                    total += ((leftover - 1) * lc_full)
+                            elif leftover == 0:
+                                if prev_full == False:
+                                    total -= lc_travel
+                                    total += lc_full
+                                prev_full = True
                         else:
-                            total -= hc_travel
-                            total += hc_full
-                            total += (leftover * lc_full)
-                            total += lc_travel
+                            if leftover >=1:
+                                if prev_full == True:
+                                    total += ((leftover - 1) * lc_full)
+                                    total += lc_travel
+                                else:
+                                    total -= hc_travel
+                                    total += hc_full
+                                    total += ((leftover - 1) * lc_full)
+                                    total += lc_travel
+                            elif leftover == 0:
+                                if prev_full == False:
+                                    total -= hc_travel
+                                    total += hc_full
+                                prev_full = True
                     else:
                         total += (2 * lc_travel)
                         total += (between * lc_full)
+                        prev_full = False
 
             else: # high cost city
                 if sd == ed: # one day project
                     if gap == 0: # next to another project
                         if prev_cc == "low": # previous low cost city
-                            total -= lc_travel
-                            total += (lc_full + hc_full)
+                            if prev_full == True:
+                                total += hc_full
+                            else:
+                                total -= lc_travel
+                                total += (lc_full + hc_full)
                         else: # previous high cost city
-                            total -= hc_travel
-                            total += (2 * hc_full)
+                            if prev_full == True:
+                                total += hc_full
+                            else:
+                                total -= hc_travel
+                                total += (2 * hc_full)
+                        prev_full = True
                     elif gap < 0: # overlap
-                        total -= hc_travel
-                        total += hc_full
+                        if prev_full == False:
+                            total -= hc_travel
+                            total += hc_full
+                        prev_full = True
                     else:
                         total += lc_travel
+                        prev_full = False
                 else: # multiple days
                     if gap == 0: # next to another project
                         if prev_cc == "low": # previous low cost city
-                            total -= lc_travel
-                            total += (lc_full + hc_travel)
-                            total += (delta.days * hc_full)
+                            if prev_full == True:
+                                total += hc_travel
+                                total += (delta.days * hc_full)
+                            else:
+                                total -= lc_travel
+                                total += (lc_full + hc_travel)
+                                total += (delta.days * hc_full)
                         else: # previous high cost city
-                            total += ((delta.days + 1) * hc_full)
+                            if prev_full == True:
+                                total += hc_travel
+                                total += (delta.days * hc_full)
+                            else:
+                                total += ((delta.days + 1) * hc_full)
+                        prev_full = False
                     elif gap < 0: # overlap
                         if prev_cc == "low":
-                            total -= lc_travel
-                            total -= (abs(gap) * lc_full)
-                            total += (abs(gap) * hc_full)
-                            total += (leftover * hc_full)
-                            total += hc_travel
+                            if leftover >= 1:
+                                if prev_full == True:
+                                    total -= (abs(gap) * lc_full)
+                                    total += (abs(gap) * hc_full)
+                                    total += ((leftover - 1) * hc_full)
+                                    total += hc_travel
+                                else:
+                                    total -= lc_travel
+                                    total -= ((abs(gap) - 1) * lc_full)
+                                    total += (abs(gap) * hc_full)
+                                    total += ((leftover - 1) * hc_full)
+                                    total += hc_travel
+                            elif leftover == 0:
+                                if prev_full == True:
+                                    total -= (abs(gap) * lc_full)
+                                    total += (abs(gap) * hc_full)
+                                    total += ((leftover - 1) * hc_full)
+                                    total += hc_travel
+                                else:
+                                    total -= lc_travel
+                                    total -= ((abs(gap) - 1) * lc_full)
+                                    total += (abs(gap) * hc_full)
+                                    total += ((leftover - 1) * hc_full)
+                                    total += hc_full
+                                prev_full = True
                         else:
-                            total += hc_full
-                            total += (leftover * hc_full)
+                            if leftover >= 1:
+                                if prev_full == True:
+                                    total += ((leftover - 1) * hc_full)
+                                    total += hc_travel
+                                else:
+                                    total += hc_full
+                                    total += ((leftover - 1) * hc_full)
+                            elif leftover == 0:
+                                if prev_full == False:
+                                    total -= hc_travel
+                                    total += hc_full
                     else: 
                         total += (2 * hc_travel)
                         total += (between * hc_full)
+                        prev_full = False
         
         # set current project info as previous project info before moving onto next project
         prev_cc = cc
         prev_sd = sd
         prev_ed = ed
 
-        print(total)
     return str(total)
 
 
