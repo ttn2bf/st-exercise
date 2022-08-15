@@ -1,7 +1,12 @@
 import json
+import argparse
 from datetime import datetime
 
-with open('sample-sets.json') as file:
+parser = argparse.ArgumentParser(description='Calculates reimbursement for sets of projects')
+parser.add_argument('data', help='JSON file containing project schedule information')
+args = parser.parse_args()
+
+with open(args.data) as file:
     data = json.load(file)
 
 # global variables
