@@ -34,7 +34,7 @@ For example:
             "proj_num": "Project 1",
             "city_cost": "low",
             "start_date": "09/01/15",
-            "end_date": "9/3/15"
+            "end_date": "09/03/15"
         }
     ],
 
